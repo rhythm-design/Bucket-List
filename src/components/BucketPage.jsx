@@ -7,22 +7,24 @@ function BucketPage({ buckets, setBuckets }) {
   const bucket = buckets.find(bucket => bucket.id === parseInt(id));
   const [cards, setCards] = useState(bucket.cards);
 
-  useEffect(() => {
-    const storedCards = localStorage.getItem(`bucket-${id}-cards`);
-    if (storedCards) {
-      setCards(JSON.parse(storedCards));
-    }
-  }, [id]);
+  // useEffect(() => {
+  //   const storedCards = localStorage.getItem(`bucket-${id}-cards`);
+  //   if (storedCards) {
+  //     setCards(JSON.parse(storedCards));
+  //   }
+  // }, [id]);
 
-  useEffect(() => {
-    const newBuckets = [...buckets];
-    const index = newBuckets.findIndex((bucket) => bucket.id === parseInt(id));
-    if (index !== -1) {
-      newBuckets[index].cards = cards;
-      setBuckets(newBuckets);
-      localStorage.setItem(`bucket-${id}-cards`, JSON.stringify(cards));
-    }
-  }, [cards, buckets, id, setBuckets]);
+  // useEffect(() => {
+  //   const newBuckets = [...buckets];
+  //   const index = newBuckets.findIndex((bucket) => bucket.id === parseInt(id));
+  //   if (index !== -1) {
+  //     newBuckets[index].cards = cards;
+  //     setBuckets(newBuckets);
+  //     localStorage.setItem(`bucket-${id}-cards`, JSON.stringify(cards));
+  //   }
+  // }, [cards, buckets, id, setBuckets]);
+
+
 
   
   function addCard(title) {
@@ -59,7 +61,11 @@ function loadCards(cards){
     
     return cards.map((card,index)=>{
         return(
-          <Card key={index} title={card.title}/>
+          <Card
+            title={card.title}
+            videoUrl="4P_umaaH2DU"
+          />
+          //<Card key={index} title={card.title}/>
         )
     })
 }
