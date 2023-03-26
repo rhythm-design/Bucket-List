@@ -6,10 +6,14 @@ import BucketPage from "./BucketPage";
 
 
 function Home(){
-    const [bucket, setbucket]= useState([]);
+    const [bucket, setbucket]= useState(JSON.parse(localStorage.getItem('bucket')) || []);
     const [showForm, setShowForm]= useState(false);
     const [plusBtn,setPlusBtn]=useState(true);
     const [bucketCount,setBucketCount]= useState(0);
+
+    useEffect(() => {
+        localStorage.setItem('bucket', JSON.stringify(bucket));
+    }, [bucket]);
 
 
     function addBucket(name){
@@ -19,6 +23,14 @@ function Home(){
             return bucketCount+1;
         })
         setbucket([...bucket, newBucket]);
+    }
+
+    function loadBuckets(bucket){
+        return bucket.map((singleBucket)=>{
+            return(
+                <Bucket key={singleBucket.id} id={singleBucket.id} name={singleBucket.name} buckets={bucket} setBuckets={setbucket} />
+            )
+        })
     }
     return (
         <Router>
@@ -34,10 +46,10 @@ function Home(){
                             plusBtn?
                                 <>
                                     <span class="pt-2 text-xl font-bold">Want to add a new Category, click here--</span>
-                                    <PlusCircleIcon className="block h-12 w-12 mb-4 text-indigo-600" onClick={()=>{
+                                    <button><PlusCircleIcon className="block h-12 w-12 mb-4 text-indigo-600" onClick={()=>{
                                         setShowForm(true);
                                         setPlusBtn(false);
-                                    }}/>
+                                    }}/></button>
                                 </>
                             :null
                         }
@@ -73,12 +85,5 @@ function Home(){
     )
 }
 
-function loadBuckets(bucket){
-    return bucket.map((singleBucket)=>{
-        return(
-            <Bucket key={singleBucket.id} id={singleBucket.id} name={singleBucket.name} />
-        )
-    })
-}
 
 export default Home;
