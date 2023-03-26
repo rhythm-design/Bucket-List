@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Bucket from "./Bucket";
 import { PlusCircleIcon } from '@heroicons/react/24/solid'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
@@ -10,6 +10,7 @@ function Home(){
     const [showForm, setShowForm]= useState(false);
     const [plusBtn,setPlusBtn]=useState(true);
     const [bucketCount,setBucketCount]= useState(0);
+
 
     function addBucket(name){
         setShowForm(false);
@@ -27,6 +28,7 @@ function Home(){
             <Routes>
                 <Route path="/" element={
                 <div>
+                    <h1 class="text-5xl pb-7 font-bold flex justify-center">Create Bucket List By Category</h1>
                     <div id="add-bucket-area" class="flex justify-center">
                         {
                             plusBtn?
@@ -44,6 +46,7 @@ function Home(){
                                 <form onSubmit={(event)=>{
                                     event.preventDefault();
                                     addBucket(event.target.name.value);
+                                    //handleAddBucket();
                                     event.target.reset();
                                     setPlusBtn(true);
                                 }}>
