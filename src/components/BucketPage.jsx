@@ -6,6 +6,8 @@ function BucketPage({ buckets, setBuckets }) {
   const { id } = useParams();
   const bucket = buckets.find(bucket => bucket.id === parseInt(id));
   const [cards, setCards] = useState(bucket.cards);
+  const videoURLList= ["iUO3_Ub85I8","IscGtF_A14A","6n3BunmIHqY","e-ORhEE9VVg","b1kbLwvqugk","UO0N7j9yI10","221F55VPp2M","RjpvuPAzJUw","T9RRe4ZsSGw","fgdpvwEWJ9M","OA1xMnDauWQ",
+  "OOQI6zAwoJc","Jg0TFzprzV0","_VD6TGvyTJY","0dRHdarYl30"]
 
   // useEffect(() => {
   //   const storedCards = localStorage.getItem(`bucket-${id}-cards`);
@@ -51,21 +53,20 @@ function BucketPage({ buckets, setBuckets }) {
         </form>
       </div>
       <div class="flex flex-wrap justify-center">
-        {loadCards(cards)}
+        {loadCards(cards,videoURLList)}
       </div>
     </div>
   );
 }
 
-function loadCards(cards){
+function loadCards(cards,videoURLList){
     
     return cards.map((card,index)=>{
         return(
           <Card
             title={card.title}
-            videoUrl="4P_umaaH2DU"
+            videoUrl={videoURLList[Math.floor(Math.random()*videoURLList.length)]}
           />
-          //<Card key={index} title={card.title}/>
         )
     })
 }
