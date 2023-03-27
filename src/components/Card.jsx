@@ -1,8 +1,8 @@
 import { useState } from "react";
 import "./Card.css"
 
-function Card(props){
-    const [title, setTitle] = useState(props.title);
+function Card({title, randomVideo}){
+    const [modifiedTitle, setModifiedTitle] = useState(title);
     const [showModal, setShowModal]= useState(false);
     const [editMode, setEditMode]=useState(false);
 
@@ -11,7 +11,7 @@ function Card(props){
     }
 
     const handleTitleChange = (e) => {
-        setTitle(e.target.value);
+        setModifiedTitle(e.target.value);
     }
 
     const handleEditClick = () => {
@@ -33,11 +33,12 @@ function Card(props){
                     <form id= "edit-form" onSubmit={handleEditSubmit}>
                         <input 
                             type="text" 
-                            value={title} 
+                            value={modifiedTitle} 
                             className="block w-30 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
-                            placeholder="Enter Modification" 
+                            placeholder="Enter New title" 
                             onChange={handleTitleChange}
                             required />
+                       
                         <button className=" bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 border rounded" type="submit">Save</button>
                         <button className=" pointer-events-auto rounded-md py-2 px-4 text-center font-medium shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50" onClick={handleEditClick}>Cancel Edit</button>
                     </form>
@@ -45,9 +46,9 @@ function Card(props){
                 <div className="card-container" onClick={toggleModal}>
                 <div className="card">
                     <div className="card-thumbnail">
-                        <img src={`https://i.ytimg.com/vi/${props.videoUrl}/maxresdefault.jpg`} alt={title}/>
+                        <img src={`https://i.ytimg.com/vi/${randomVideo}/maxresdefault.jpg`} alt={modifiedTitle}/>
                     </div>
-                    <div className="card-title">{title}</div>
+                    <div className="card-title">{modifiedTitle}</div>
                 </div>
                 {showModal && (
                     <div className="modal-container">
@@ -55,8 +56,8 @@ function Card(props){
                             <div className="video-container">
                                 <iframe width="560" 
                                     height="315" 
-                                    src={`https://www.youtube.com/embed/${props.videoUrl}`}
-                                    title={title}
+                                    src={`https://www.youtube.com/embed/${randomVideo}`}
+                                    title={modifiedTitle}
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                                     allowfullscreen

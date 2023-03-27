@@ -5,9 +5,17 @@ import Card from './Card';
 function BucketPage({ buckets, setBuckets }) {
   const { id } = useParams();
   const bucket = buckets.find(bucket => bucket.id === parseInt(id));
-  const [cards, setCards] = useState(bucket.cards);
+
+  const [cards, setCards] = useState(() => {
+    const savedCards = JSON.parse(localStorage.getItem(`bucket-${id}-cards`));
+    return savedCards ?? [];
+  });
   const videoURLList= ["iUO3_Ub85I8","IscGtF_A14A","6n3BunmIHqY","e-ORhEE9VVg","b1kbLwvqugk","UO0N7j9yI10","221F55VPp2M","RjpvuPAzJUw","T9RRe4ZsSGw","fgdpvwEWJ9M","OA1xMnDauWQ",
   "OOQI6zAwoJc","Jg0TFzprzV0","_VD6TGvyTJY","0dRHdarYl30"]
+
+  useEffect(() => {
+    localStorage.setItem(`bucket-${id}-cards`, JSON.stringify(cards));
+  }, [id, cards]);
 
   function logEvent(event) {
     const time = new Date().toUTCString();
@@ -17,8 +25,10 @@ function BucketPage({ buckets, setBuckets }) {
     localStorage.setItem('logs', JSON.stringify(logs));
   }
   
-  function addCard(title) {
-    const newCard = { id: cards.length + 1, title};
+  function addCard(title, randomVideo) {
+    
+
+    const newCard = { id: cards.length + 1, title, randomVideo};
     setCards([...cards, newCard]);
     logEvent(`Created new Card "${newCard}"`);
   }
@@ -29,7 +39,8 @@ function BucketPage({ buckets, setBuckets }) {
       <div class="flex justify-center">
         <form onSubmit={(event) => {
             event.preventDefault();
-            addCard(event.target.title.value);
+            const randomVideo= videoURLList[Math.floor(Math.random()*videoURLList.length)]
+            addCard(event.target.title.value, randomVideo);
             event.target.reset();
         }}>
             <input 
@@ -54,7 +65,7 @@ function loadCards(cards,videoURLList){
         return(
           <Card
             title={card.title}
-            videoUrl={videoURLList[Math.floor(Math.random()*videoURLList.length)]}
+            randomVideo={card.randomVideo}
           />
         )
     })
