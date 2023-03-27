@@ -9,29 +9,18 @@ function BucketPage({ buckets, setBuckets }) {
   const videoURLList= ["iUO3_Ub85I8","IscGtF_A14A","6n3BunmIHqY","e-ORhEE9VVg","b1kbLwvqugk","UO0N7j9yI10","221F55VPp2M","RjpvuPAzJUw","T9RRe4ZsSGw","fgdpvwEWJ9M","OA1xMnDauWQ",
   "OOQI6zAwoJc","Jg0TFzprzV0","_VD6TGvyTJY","0dRHdarYl30"]
 
-  // useEffect(() => {
-  //   const storedCards = localStorage.getItem(`bucket-${id}-cards`);
-  //   if (storedCards) {
-  //     setCards(JSON.parse(storedCards));
-  //   }
-  // }, [id]);
-
-  // useEffect(() => {
-  //   const newBuckets = [...buckets];
-  //   const index = newBuckets.findIndex((bucket) => bucket.id === parseInt(id));
-  //   if (index !== -1) {
-  //     newBuckets[index].cards = cards;
-  //     setBuckets(newBuckets);
-  //     localStorage.setItem(`bucket-${id}-cards`, JSON.stringify(cards));
-  //   }
-  // }, [cards, buckets, id, setBuckets]);
-
-
-
+  function logEvent(event) {
+    const time = new Date().toUTCString();
+    const logEntry = { time, event };
+    const logs = JSON.parse(localStorage.getItem('logs')) || [];
+    logs.push(logEntry);
+    localStorage.setItem('logs', JSON.stringify(logs));
+  }
   
   function addCard(title) {
     const newCard = { id: cards.length + 1, title};
     setCards([...cards, newCard]);
+    logEvent(`Created new Card "${newCard}"`);
   }
 
   return (

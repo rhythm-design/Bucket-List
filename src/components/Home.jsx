@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Bucket from "./Bucket";
-import { PlusCircleIcon } from '@heroicons/react/24/solid'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { PlusCircleIcon, HomeIcon } from '@heroicons/react/24/solid'
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import BucketPage from "./BucketPage";
 
 
@@ -15,6 +15,14 @@ function Home(){
         localStorage.setItem('bucket', JSON.stringify(bucket));
     }, [bucket]);
 
+    function logEvent(event) {
+        const time = new Date().toUTCString();
+        const logEntry = { time, event };
+        const logs = JSON.parse(localStorage.getItem('logs')) || [];
+        logs.push(logEntry);
+        localStorage.setItem('logs', JSON.stringify(logs));
+      }
+
 
     function addBucket(name){
         setShowForm(false);
@@ -23,6 +31,7 @@ function Home(){
             return bucketCount+1;
         })
         setbucket([...bucket, newBucket]);
+        logEvent(`Added Bucket"${newBucket}"`)
     }
 
     function loadBuckets(bucket){
@@ -35,12 +44,13 @@ function Home(){
     return (
         <Router>
             <nav>
-                <Link to="/">Home</Link>
+                <Link to="/"><HomeIcon className="block h-8 w-8 m-4"/></Link>
             </nav>
             <Routes>
                 <Route path="/" element={
                 <div>
                     <h1 class="text-5xl pb-7 font-bold flex justify-center">Create Bucket List By Category</h1>
+                    <button onClick={showHistory}>History</button>
                     <div id="add-bucket-area" class="flex justify-center">
                         {
                             plusBtn?
@@ -81,9 +91,19 @@ function Home(){
                 } />
                 <Route path="/bucket/:id" element={<BucketPage buckets={bucket} setBuckets={setbucket} />} />
         </Routes>
+        
     </Router> 
     )
 }
 
-
+function showHistory(){
+    const logs = JSON.parse(localStorage.getItem('logs')) || [];
+    const historyList = document.createElement('ul');
+    logs.forEach(logEntry => {
+    const listItem = document.createElement('li');
+    listItem.innerText = `${logEntry.time}: ${logEntry.event}`;
+    historyList.appendChild(listItem);
+    });
+    document.body.appendChild(historyList);
+}
 export default Home;
