@@ -2,20 +2,10 @@ import React from "react";
 import { Link } from 'react-router-dom';
 
 function Bucket(props){
-
-    function logEvent(event) {
-        const time = new Date().toUTCString();
-        const logEntry = { time, event };
-        const logs = JSON.parse(localStorage.getItem('logs')) || [];
-        logs.push(logEntry);
-        localStorage.setItem('logs', JSON.stringify(logs));
-    }
-
     function deleteBucket(id) {
         const alertData= window.confirm('Do you really want to delete a Bucket?')
         if(alertData){
             const updatedBuckets = props.buckets.filter((bucket) => bucket.id !== Number(id));
-            logEvent(`Deleted Bucket"${props.buckets.filter((bucket) => bucket.id === Number(id))}"`)
             props.setBuckets(updatedBuckets);
             localStorage.setItem('bucket', JSON.stringify(updatedBuckets));
         }

@@ -26,11 +26,9 @@ function BucketPage({ buckets, setBuckets }) {
   }
   
   function addCard(title, randomVideo) {
-    
-
     const newCard = { id: cards.length + 1, title, randomVideo};
     setCards([...cards, newCard]);
-    logEvent(`Created new Card "${newCard}"`);
+    logEvent(`Created new Card  :"${newCard.title}"`);
   }
 
   return (

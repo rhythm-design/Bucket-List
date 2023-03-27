@@ -8,6 +8,9 @@ function Card({title, randomVideo}){
     const [modifiedVideo, setModifiedVideo]= useState(randomVideo);
 
     const toggleModal = () =>{
+        if(!showModal){
+            logEvent(`Card clicked: "${modifiedTitle}" VideoID Played: "${modifiedVideo}"`);
+        }
         setShowModal(!showModal)
     }
 
@@ -28,6 +31,14 @@ function Card({title, randomVideo}){
         })
         setEditMode(false);
     }
+
+    function logEvent(event) {
+        const time = new Date().toUTCString();
+        const logEntry = { time, event };
+        const logs = JSON.parse(localStorage.getItem('logs')) || [];
+        logs.push(logEntry);
+        localStorage.setItem('logs', JSON.stringify(logs));
+      }
 
     const handleLinkChange = (e) => {
         setModifiedVideo(e.target.value);
@@ -94,7 +105,7 @@ function Card({title, randomVideo}){
                 !editMode?
                     <>
                         <button className="pointer-events-auto rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-white hover:bg-indigo-500"  onClick={handleEditClick}>Edit Card</button>
-                        <button className="pointer-events-auto rounded-md py-2 px-4 text-center font-medium shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50">Delete Card</button>
+                        
                     </>
                 :
                 null

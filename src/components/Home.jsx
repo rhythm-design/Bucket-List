@@ -3,6 +3,7 @@ import Bucket from "./Bucket";
 import { PlusCircleIcon, HomeIcon } from '@heroicons/react/24/solid'
 import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from 'react-router-dom';
 import BucketPage from "./BucketPage";
+import HistoryPage from "./HistoryPage";
 
 
 function Home(){
@@ -15,15 +16,6 @@ function Home(){
         localStorage.setItem('bucket', JSON.stringify(bucket));
     }, [bucket]);
 
-    function logEvent(event) {
-        const time = new Date().toUTCString();
-        const logEntry = { time, event };
-        const logs = JSON.parse(localStorage.getItem('logs')) || [];
-        logs.push(logEntry);
-        localStorage.setItem('logs', JSON.stringify(logs));
-      }
-
-
     function addBucket(name){
         setShowForm(false);
         const newBucket = { id: bucketCount, name, cards: [] };
@@ -31,7 +23,6 @@ function Home(){
             return bucketCount+1;
         })
         setbucket([...bucket, newBucket]);
-        logEvent(`Added Bucket"${newBucket}"`)
     }
 
     function loadBuckets(bucket){
@@ -42,20 +33,24 @@ function Home(){
         })
     }
     return (
+        <>
         <Router>
-            <nav>
-                <Link to="/"><HomeIcon className="block h-8 w-8 m-4"/></Link>
+            <nav className="inline">
+                <Link to="/"><HomeIcon className="inline  h-8 w-8 m-4"/></Link>
+                <Link to="/history" className="float-right">
+                    <button class="p-4 mr-6 mt-4 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 rounded"> Show History </button>
+                </Link>
             </nav>
             <Routes>
                 <Route path="/" element={
                 <div>
                     <h1 class="text-5xl pb-7 font-bold flex justify-center">Create Bucket List By Category</h1>
-                    <button onClick={showHistory}>History</button>
+                    
                     <div id="add-bucket-area" class="flex justify-center">
                         {
                             plusBtn?
                                 <>
-                                    <span class="pt-2 text-xl font-bold">Want to add a new Category, click here--</span>
+                                    <span class="pt-2 text-xl font-bold">Want to add a new Category, click here--{">"}</span>
                                     <button><PlusCircleIcon className="block h-12 w-12 mb-4 text-indigo-600" onClick={()=>{
                                         setShowForm(true);
                                         setPlusBtn(false);
@@ -68,7 +63,6 @@ function Home(){
                                 <form onSubmit={(event)=>{
                                     event.preventDefault();
                                     addBucket(event.target.name.value);
-                                    //handleAddBucket();
                                     event.target.reset();
                                     setPlusBtn(true);
                                 }}>
@@ -89,21 +83,12 @@ function Home(){
                     </div>
                 </div>
                 } />
+                <Route path="/history" element={<HistoryPage/>}/>
                 <Route path="/bucket/:id" element={<BucketPage buckets={bucket} setBuckets={setbucket} />} />
         </Routes>
         
-    </Router> 
+    </Router>
+    </> 
     )
-}
-
-function showHistory(){
-    const logs = JSON.parse(localStorage.getItem('logs')) || [];
-    const historyList = document.createElement('ul');
-    logs.forEach(logEntry => {
-    const listItem = document.createElement('li');
-    listItem.innerText = `${logEntry.time}: ${logEntry.event}`;
-    historyList.appendChild(listItem);
-    });
-    document.body.appendChild(historyList);
 }
 export default Home;
