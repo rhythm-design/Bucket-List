@@ -22,13 +22,16 @@ function Card({title, randomVideo}){
         setEditMode(!editMode);
     }
 
+    function handleLink(link){
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        var match = link.match(regExp);
+        return (match&&match[7].length==11)? match[7] : "";
+    }
+
     const handleEditSubmit = (e) => {
         e.preventDefault();
         var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-        setModifiedVideo((modifiedVideo)=>{
-            var match = modifiedVideo.match(regExp);
-            return (match&&match[7].length==11)? match[7] : false;
-        })
+        setModifiedVideo(modifiedVideo)
         setEditMode(false);
     }
 
@@ -75,7 +78,7 @@ function Card({title, randomVideo}){
                 <div className="card-container" onClick={toggleModal}>
                 <div className="card">
                     <div className="card-thumbnail">
-                        <img src={`https://i.ytimg.com/vi/${modifiedVideo}/maxresdefault.jpg`} alt={modifiedTitle}/>
+                        <img src={`https://i.ytimg.com/vi/${handleLink(modifiedVideo)}/maxresdefault.jpg`} alt={modifiedTitle}/>
                     </div>
                     <div className="card-title">{modifiedTitle}</div>
                 </div>
@@ -85,11 +88,11 @@ function Card({title, randomVideo}){
                             <div className="video-container">
                                 <iframe width="560" 
                                     height="315" 
-                                    src={`https://www.youtube.com/embed/${modifiedVideo}`}
+                                    src={`https://www.youtube.com/embed/${handleLink(modifiedVideo)}`}
                                     title={modifiedTitle}
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                                    allowfullscreen
+                                    allowFullScreen
                                     controls></iframe>
                             </div>
                         </div>
@@ -105,7 +108,6 @@ function Card({title, randomVideo}){
                 !editMode?
                     <>
                         <button className="pointer-events-auto rounded-md bg-indigo-600 py-2 px-3 text-[0.8125rem] font-semibold leading-5 text-white hover:bg-indigo-500"  onClick={handleEditClick}>Edit Card</button>
-                        
                     </>
                 :
                 null

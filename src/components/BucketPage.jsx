@@ -63,7 +63,7 @@ function loadCards(cards,videoURLList){
         return(
           <Card
             title={card.title}
-            randomVideo={card.randomVideo}
+            randomVideo={`https://www.youtube.com/embed/${card.randomVideo}`}
           />
         )
     })
