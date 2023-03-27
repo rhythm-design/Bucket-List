@@ -5,6 +5,7 @@ function Card({title, randomVideo}){
     const [modifiedTitle, setModifiedTitle] = useState(title);
     const [showModal, setShowModal]= useState(false);
     const [editMode, setEditMode]=useState(false);
+    const [modifiedVideo, setModifiedVideo]= useState(randomVideo);
 
     const toggleModal = () =>{
         setShowModal(!showModal)
@@ -20,7 +21,16 @@ function Card({title, randomVideo}){
 
     const handleEditSubmit = (e) => {
         e.preventDefault();
+        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+        setModifiedVideo((modifiedVideo)=>{
+            var match = modifiedVideo.match(regExp);
+            return (match&&match[7].length==11)? match[7] : false;
+        })
         setEditMode(false);
+    }
+
+    const handleLinkChange = (e) => {
+        setModifiedVideo(e.target.value);
     }
 
     return (
@@ -38,6 +48,14 @@ function Card({title, randomVideo}){
                             placeholder="Enter New title" 
                             onChange={handleTitleChange}
                             required />
+
+                        <input 
+                            type="text" 
+                            value={modifiedVideo}
+                            className="block w-30 rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" 
+                            placeholder="Enter New Youtube link " 
+                            onChange={handleLinkChange}
+                            required />
                        
                         <button className=" bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2 px-4 border rounded" type="submit">Save</button>
                         <button className=" pointer-events-auto rounded-md py-2 px-4 text-center font-medium shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50" onClick={handleEditClick}>Cancel Edit</button>
@@ -46,7 +64,7 @@ function Card({title, randomVideo}){
                 <div className="card-container" onClick={toggleModal}>
                 <div className="card">
                     <div className="card-thumbnail">
-                        <img src={`https://i.ytimg.com/vi/${randomVideo}/maxresdefault.jpg`} alt={modifiedTitle}/>
+                        <img src={`https://i.ytimg.com/vi/${modifiedVideo}/maxresdefault.jpg`} alt={modifiedTitle}/>
                     </div>
                     <div className="card-title">{modifiedTitle}</div>
                 </div>
@@ -56,7 +74,7 @@ function Card({title, randomVideo}){
                             <div className="video-container">
                                 <iframe width="560" 
                                     height="315" 
-                                    src={`https://www.youtube.com/embed/${randomVideo}`}
+                                    src={`https://www.youtube.com/embed/${modifiedVideo}`}
                                     title={modifiedTitle}
                                     frameborder="0" 
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
