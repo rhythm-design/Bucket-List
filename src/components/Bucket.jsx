@@ -8,6 +8,14 @@ function Bucket(props){
             const updatedBuckets = props.buckets.filter((bucket) => bucket.id !== Number(id));
             props.setBuckets(updatedBuckets);
             localStorage.setItem('bucket', JSON.stringify(updatedBuckets));
+            const cards = JSON.parse(localStorage.getItem(`bucket-${id}-cards`)) || [];
+            localStorage.removeItem(`bucket-${id}-cards`);
+            cards.forEach((card) => {
+                const newCards = JSON.parse(localStorage.getItem(`bucket-${card.bucketId}-cards`)) || [];
+                const filteredCards = newCards.filter((c) => c.id !== card.id);
+                localStorage.setItem(`bucket-${card.bucketId}-cards`, JSON.stringify(filteredCards));
+            });
+
         }
     }
 
